@@ -26,9 +26,7 @@ public class UserResource {
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<User> findById(@PathVariable Long id) {
-        try {
-            User obj = service.findById(id);
-        } catch (NoSuchEl)
+        User obj = service.findById(id);
         return ResponseEntity.ok().body(obj);
     }
 }
