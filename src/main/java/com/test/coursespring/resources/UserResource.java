@@ -44,5 +44,12 @@ public class UserResource {
         return ResponseEntity.noContent().build();
     }
 
-
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<User> update(@PathVariable Long id, @RequestBody User obj) {
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(obj.getId())
+                .toUri();
+        return ResponseEntity.created(uri).body(service.update(obj, id));
+    }
 }
