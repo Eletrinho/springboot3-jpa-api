@@ -72,7 +72,7 @@ public class Order implements Serializable {
         this.payment = payment;
     }
 
-    public double total(){
-        return items.stream().mapToDouble(OrderItem::subTotal).sum();
+    public double getTotal(){
+        return items.stream().mapToDouble(OrderItem::getSubTotal).sum();
     }
 }
