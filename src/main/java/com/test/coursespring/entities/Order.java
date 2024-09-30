@@ -18,6 +18,9 @@ public class Order implements Serializable {
     private Instant moment;
     private Integer orderStatus;
 
+    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
+    private Payment payment;
+
     @OneToMany(mappedBy = "id.order")
     private List<OrderItem> items = new ArrayList<>();
 
@@ -59,6 +62,14 @@ public class Order implements Serializable {
 
     public List<OrderItem> getItems() {
         return items;
+    }
+
+    public Payment getPayment() {
+        return payment;
+    }
+
+    public void setPayment(Payment payment) {
+        this.payment = payment;
     }
 
     public double total(){
