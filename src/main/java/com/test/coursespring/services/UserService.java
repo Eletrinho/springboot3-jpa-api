@@ -48,9 +48,9 @@ public class UserService {
             user.setEmail(obj.getEmail());
             user.setName(obj.getName());
             user.setPhone(obj.getPhone());
+            return repository.save(user);
         } catch (EntityNotFoundException e){
             throw new ResourceNotFoundException(id);
         }
-        return repository.save(user);
     }
 }
