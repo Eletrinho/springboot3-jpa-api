@@ -28,28 +28,40 @@ public class UserService {
         return obj.orElseThrow(() -> new ResourceNotFoundException(id));
     }
 
-    public User insert(User obj){
+    public User findByEmail(String email) {
+        Optional<User> obj = repository.findByEmail(email);
+        return obj.orElseThrow(() -> new ResourceNotFoundException(email));
+    }
+
+    public User insert(User obj) {
         return repository.save(obj);
     }
 
-    public void delete(Long id){
+    public void delete(Long id, User current_user) {
         try {
-            repository.deleteById(id);
+            if (current_user.getId() != id) {
+
+            } else {
+                repository.deleteById(id);
+            }
         } catch (EmptyResultDataAccessException e) {
             throw new ResourceNotFoundException(id);
-        } catch (DataIntegrityViolationException e){
+        } catch (DataIntegrityViolationException e) {
             throw new DatabaseException(e.getMessage());
         }
     }
 
-    public User update(User obj, Long id){
+    public User update(User obj, Long id, User current) {
         try {
             User user = repository.getReferenceById(id);
+            if (current.getId() != user.getId()) {
+                throw new ResourceNotFoundException(current.getEmail());
+            }
             user.setEmail(obj.getEmail());
             user.setName(obj.getName());
             user.setPhone(obj.getPhone());
             return repository.save(user);
-        } catch (EntityNotFoundException e){
+        } catch (EntityNotFoundException e) {
             throw new ResourceNotFoundException(id);
         }
     }
