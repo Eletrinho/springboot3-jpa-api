@@ -5,8 +5,10 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTDecodeException;
+import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.test.coursespring.entities.User;
+import com.test.coursespring.services.exceptions.UnauthorizedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,14 +29,14 @@ public class TokenService implements Serializable {
             Map<String, Object> head = new HashMap<>();
             head.put(HeaderParams.ALGORITHM, "HS256");
             head.put(HeaderParams.TYPE, "JWT");
-            Instant exp = Instant.now().plus(1, ChronoUnit.MINUTES);
+            Instant exp = Instant.now().plus(30, ChronoUnit.MINUTES);
             return JWT.create()
                     .withHeader(head)
                     .withClaim("sub", userEmail)
                     .withExpiresAt(exp)
                     .sign(Algorithm.HMAC256("chave"));
         } catch (JWTDecodeException e) {
-            throw new RuntimeException(e);
+            throw new UnauthorizedException(e.getMessage());
         }
     }
 
@@ -42,9 +44,13 @@ public class TokenService implements Serializable {
         try {
             DecodedJWT decode = JWT.decode(token);
             String email = decode.getClaim("sub").asString();
+            Instant expirationTime = decode.getExpiresAt().toInstant();
+            if (expirationTime.isBefore(Instant.now())) {
+                throw new UnauthorizedException("Token expirado, faça o login novamente");
+            }
             return userService.findByEmail(email);
         } catch (JWTDecodeException e) {
-            throw new RuntimeException(e);
+            throw new UnauthorizedException(e.getMessage());
         }
     }
 }
