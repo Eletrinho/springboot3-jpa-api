@@ -1,6 +1,5 @@
 package com.test.coursespring.resources;
 
-import com.test.coursespring.entities.Token;
 import com.test.coursespring.entities.User;
 import com.test.coursespring.services.TokenService;
 import com.test.coursespring.services.UserService;
@@ -23,7 +22,7 @@ public class UserResource {
     private TokenService tokenService;
 
     @GetMapping
-    public ResponseEntity<List<User>> findAll(){
+    public ResponseEntity<List<User>> findAll() {
         List<User> list = service.findAll();
         return ResponseEntity.ok().body(list);
     }

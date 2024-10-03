@@ -36,6 +36,7 @@ public class UserService {
     }
 
     public User insert(User obj) {
+        obj.setPassword(EncoderService.getPasswordHash(obj.getPassword()));
         return repository.save(obj);
     }
 
@@ -50,9 +51,10 @@ public class UserService {
             throw new ResourceNotFoundException(id);
         } catch (DataIntegrityViolationException e) {
             throw new DatabaseException(e.getMessage());
-        } catch (TokenExpiredException e){
+        } catch (TokenExpiredException e) {
             throw new UnauthorizedException(e.getMessage());
-    }}
+        }
+    }
 
     public User update(User obj, Long id, User current) {
         try {
@@ -66,7 +68,7 @@ public class UserService {
             return repository.save(user);
         } catch (EntityNotFoundException e) {
             throw new ResourceNotFoundException(id);
-        } catch (TokenExpiredException e){
+        } catch (TokenExpiredException e) {
             throw new UnauthorizedException(e.getMessage());
         }
     }
