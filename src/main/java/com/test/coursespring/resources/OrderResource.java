@@ -2,12 +2,10 @@ package com.test.coursespring.resources;
 
 import com.test.coursespring.entities.Order;
 import com.test.coursespring.services.OrderService;
+import com.test.coursespring.services.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -18,9 +16,12 @@ public class OrderResource {
     @Autowired
     private OrderService service;
 
+    @Autowired
+    private TokenService tokenService;
+
     @GetMapping
-    public ResponseEntity<List<Order>> findAll(){
-        List<Order> list = service.findAll();
+    public ResponseEntity<List<Order>> findAll(@RequestHeader("Authorization") String token){
+        List<Order> list = service.findAll(tokenService.getCurrentUser(token));
         return ResponseEntity.ok().body(list);
     }
 
