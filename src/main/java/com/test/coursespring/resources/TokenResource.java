@@ -24,7 +24,7 @@ public class TokenResource {
     private UserService userService;
 
     @GetMapping
-    public ResponseEntity<Token> loginUserAccess(@RequestBody User obj){
+    public ResponseEntity<Token> loginUserAccess(@RequestBody User obj) {
         if (!EncoderService.verifyPassword(obj.getPassword(), userService.findByEmail(obj.getEmail()).getPassword())) {
             throw new UnauthorizedException("Dados de login incorretos");
         }

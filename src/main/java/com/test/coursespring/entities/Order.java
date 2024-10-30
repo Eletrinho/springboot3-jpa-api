@@ -46,12 +46,12 @@ public class Order implements Serializable {
         return moment;
     }
 
-    public User getClient() {
-        return client;
-    }
-
     public void setMoment(Instant moment) {
         this.moment = moment;
+    }
+
+    public User getClient() {
+        return client;
     }
 
     public OrderStatus getOrderStatus() {
@@ -59,7 +59,7 @@ public class Order implements Serializable {
     }
 
     public void setOrderStatus(OrderStatus orderStatus) {
-        if (orderStatus != null){
+        if (orderStatus != null) {
             this.orderStatus = orderStatus.getCode();
         }
     }
@@ -76,7 +76,7 @@ public class Order implements Serializable {
         this.payment = payment;
     }
 
-    public double getTotal(){
+    public double getTotal() {
         return items.stream().mapToDouble(OrderItem::getSubTotal).sum();
     }
 }

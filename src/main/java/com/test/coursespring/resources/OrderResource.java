@@ -20,7 +20,7 @@ public class OrderResource {
     private TokenService tokenService;
 
     @GetMapping
-    public ResponseEntity<List<Order>> findAll(@RequestHeader("Authorization") String token){
+    public ResponseEntity<List<Order>> findAll(@RequestHeader("Authorization") String token) {
         List<Order> list = service.findAll(tokenService.getCurrentUser(token));
         return ResponseEntity.ok().body(list);
     }
